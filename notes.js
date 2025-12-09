@@ -17,14 +17,20 @@ const notesFile = path.join(__dirname, 'notes.json');
     fs.writeFileSync(notesFile, JSON.stringify(notes, null, 2));
 }
     
-    function loadNotes() {
+function loadNotes(note) {
+    console.log("Loading notes with filter:", note);
     if (fs.existsSync(notesFile)) {
-        const data = fs.readFileSync(notesFile, 'utf8');
-        return JSON.parse(data);
+        if (note) {
+            const data = fs.readFileSync(notesFile, 'utf8');
+            let notes = JSON.parse(data);
+            return notes.filter(n => n.note.includes(note));
+        } else {
+            const data = fs.readFileSync(notesFile, 'utf8');
+            return JSON.parse(data);
+        }
     }
     return [];
 }
-
 
     function updateNote(id, newContent) {
 
@@ -52,4 +58,4 @@ const notesFile = path.join(__dirname, 'notes.json');
 }
 
 
-module.exports = { addNote, loadNotes, updateNote, deleteNote };
+module.exports = { addNote, loadNotes, updateNote, deleteNote};

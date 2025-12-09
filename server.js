@@ -48,8 +48,13 @@ app.get("/", (req, res) => {
                     <input type="submit" value="Submit">
                 </form>
                 <div id="NoteList">
+                    <h2>Your Notes:</h2>
+                    <form action="/" method="GET">
+                        <input type="text" name="filter" placeholder="Filter notes">
+                        <input type="submit" value="Filter">
+                    </form>
                     <ul>
-                        ${loadNotes()
+                        ${loadNotes(req.query.filter)
                             .map(
                             (note) =>
                             `<li><span>${note.note}</span>

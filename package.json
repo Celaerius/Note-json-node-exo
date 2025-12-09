@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "load": "node -e \"const {loadNotes} = require('./notes.js'); console.log(loadNotes());\"",
+    "add": "node -e \"const {addNote} = require('./notes.js'); addNote(process.argv[1]);\"",
+    "update": "node -e \"const {updateNote} = require('./notes.js'); updateNote(process.argv[1], process.argv[2]);\"",
+    "delete": "node -e \"const {deleteNote} = require('./notes.js'); deleteNote(process.argv[1]);\""
   },
   "repository": {
     "type": "git",
