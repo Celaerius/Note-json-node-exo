@@ -1,5 +1,9 @@
+const fs = require('fs');
+const path = require('path');
+
+const notesFile = path.join(__dirname, 'notes.json');
+
 function addNote(note) {
-    const notesFile = 'notes.json';
     let notes = [];
 
     if (fs.existsSync(notesFile)) {
@@ -14,7 +18,6 @@ function addNote(note) {
 }
 
 function loadNotes() {
-    const notesFile = 'notes.json';
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');
         return JSON.parse(data);
@@ -23,8 +26,6 @@ function loadNotes() {
 }
 
 function updateNote(id, newContent) {
-
-    const notesFile = 'notes.json';
 
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');
@@ -39,8 +40,6 @@ function updateNote(id, newContent) {
 }
 
 function deleteNote(id) {
-
-    const notesFile = 'notes.json';
 
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');

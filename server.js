@@ -1,11 +1,15 @@
 const http = require('http');
 const app = require('express')();
 const PORT = process.env.PORT || 3000;
-const fs = require('fs');
 
 app.post('/add-notes', (req, res) => {
+    if (!req.body || !req.body.note) {
+        return res.status(400).send('Note content is required');
+    }
+
+    const notesModule = require('./notes');
     notesModule.addNote(req.body.note);
-    res.redirect('/');
+    return res.redirect('/');
 });
 
 const server = http.createServer(app);
@@ -21,7 +25,7 @@ server.on('request', (req, res) => {
                 <title>Note</title>
             </head>
             <body>
-                <form action="/add-note" method="POST">
+                <form action="/add-notes" method="POST">
                     <label for="note">Enter your note:</label><br>
                     <textarea id="note" name="note" rows="10" cols="30"></textarea><br>
                     <input type="submit" value="Submit">
