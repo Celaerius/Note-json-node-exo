@@ -3,7 +3,7 @@ const path = require('path');
 
 const notesFile = path.join(__dirname, 'notes.json');
 
-export function addNote(note) {
+    function addNote(note) {
     let notes = [];
 
     if (fs.existsSync(notesFile)) {
@@ -16,8 +16,8 @@ export function addNote(note) {
 
     fs.writeFileSync(notesFile, JSON.stringify(notes, null, 2));
 }
-
-export function loadNotes() {
+    
+    function loadNotes() {
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');
         return JSON.parse(data);
@@ -25,7 +25,8 @@ export function loadNotes() {
     return [];
 }
 
-export function updateNote(id, newContent) {
+
+    function updateNote(id, newContent) {
 
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');
@@ -39,7 +40,7 @@ export function updateNote(id, newContent) {
     }
 }
 
-export function deleteNote(id) {
+    function deleteNote(id) {
 
     if (fs.existsSync(notesFile)) {
         const data = fs.readFileSync(notesFile, 'utf8');
@@ -49,3 +50,6 @@ export function deleteNote(id) {
         fs.writeFileSync(notesFile, JSON.stringify(notes, null, 2));
     }
 }
+
+
+module.exports = { addNote, loadNotes, updateNote, deleteNote };
