@@ -8,7 +8,7 @@ class TodoService {
 
     static async createTodo(todo) {
         if (!todo.title || todo.title.trim() === '') {
-            throw new ValidationError('Titre de la tâche invalide');
+            throw new ValidationError('Titre obligatoire, veuillez le fournir.', 400);
         }
 
         return await TodoModel.create(todo);
