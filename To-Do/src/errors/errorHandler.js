@@ -1,7 +1,7 @@
 
+
 const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Une erreur interne est survenue' });
+        return res.status(400).json({ message: err.message, status: err.status  });
 };
 
 module.exports = { errorHandler };
