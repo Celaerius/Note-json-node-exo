@@ -1,30 +1,20 @@
 const TodoService = require('../services/todo.service');
+const { asyncHandlers } = require('../utils/asyncHandlers');
 
 class TodoController {
-    static async getAllTodos(req, res) {
-        try {
-            const todos = await TodoService.getAllTodos();
-            res.status(200).json(todos);
-        } catch (error) {
-            res.status(500).json({ error: 'Erreur lors de la récupération des tâches' });
-        }
-    }
 
-    static async createTodo(req, res) {
-        try {
-            const { title, completed } = req.body;
-            
-            const newTodo = await TodoService.createTodo({ title, completed });
-            
-            if (newTodo === null) {
-                return res.status(400).json({ error: 'Le titre de la tâche est requis' });
-            }
-            
-            res.status(201).json(newTodo);
-        } catch (error) {
-            res.status(500).json({ error: 'Erreur lors de la création de la tâche' });
+    static getAllTodos = asyncHandlers(async (req, res) => {
+        const todos = await TodoService.getAllTodos();
+        res.status(200).json(todos);
+    });
+
+    static createTodo = asyncHandlers(async (req, res) => {
+        const newTodo = await TodoService.createTodo(req.body);
+        if (!newTodo) {
+            return res.status(400).json({ message: 'Titre de la tâche invalide' });
         }
-    }
+        res.status(201).json(newTodo);
+    });
 }
 
 module.exports = TodoController;

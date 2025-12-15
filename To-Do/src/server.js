@@ -1,8 +1,8 @@
 const app = require('./app');
+const config = require('./config');
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.port || 3030;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-    console.log(`📋 API disponible sur http://localhost:${PORT}/api/todos`);
+    console.log(`Server is running on port ${PORT} in ${config.nodeEnv} mode.`);
 });
