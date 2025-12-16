@@ -1,6 +1,5 @@
 const app = require('./app');
 const config = require('./config');
-const reflect = require('reflect-metadata');
 const ErrorHandler = require('./errors/errorHandler');
 const AppDataSource = require('./config/data-source');
 

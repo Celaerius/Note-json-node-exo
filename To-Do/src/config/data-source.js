@@ -5,7 +5,10 @@ const AppDataSource = new DataSource({
     database: 'database.sqlite',
     synchronize: true,
     logging: true,
-    entities: [],
+    entities: [
+        require('../models/user.entity'),
+        require('../models/todo.entity'),
+    ],
 });
 
 module.exports = AppDataSource;

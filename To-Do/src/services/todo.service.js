@@ -1,17 +1,23 @@
-const TodoModel = require('../models/todo.model');
 const { ValidationError } = require('../errors/ApiErrors');
+const AppDataSource = require('../config/data-source');
 
 class TodoService {
+
+    static get repo() {
+        return AppDataSource.getRepository('Todo');
+    }
+
     static async getAllTodos() {
-        return await TodoModel.findAll();
+        return await this.repo.find();
+    }
+
+    static async findById(id) {
+        return await this.repo.findOneBy({ id: id });
     }
 
     static async createTodo(todo) {
-        if (!todo.title || todo.title.trim() === '') {
-            throw new ValidationError('Titre obligatoire, veuillez le fournir.', 400);
-        }
-
-        return await TodoModel.create(todo);
+        const newTodo = this.repo.create(todo);
+        return await this.repo.save(newTodo);
     }
 }
 
