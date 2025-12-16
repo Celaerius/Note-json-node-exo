@@ -20,7 +20,9 @@ class TodoService {
     }
 
     static async getTodosNoTags() {
-        return await this.repository.find({ relations: ['user'] });
+
+        const todo = await this.repository.find({ relations: ['user', 'tags'] });
+        return todo.filter(t => t.tags.length === 0);
     }
 
     static async findById(id) {
