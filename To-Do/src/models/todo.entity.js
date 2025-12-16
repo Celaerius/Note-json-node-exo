@@ -25,6 +25,11 @@ const TodoEntity = new EntitySchema({
             joinColumn: true,
             inverseSide: 'todos',
         },
+        tags: {
+            type: 'many-to-many',
+            target: 'Tag',
+            inverseSide: 'todos',
+        },
     },
 });
 

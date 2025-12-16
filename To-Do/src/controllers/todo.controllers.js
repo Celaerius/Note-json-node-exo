@@ -8,6 +8,11 @@ class TodoController {
         res.status(200).json(todos);
     });
 
+    static getTodosNoTags = asyncHandlers(async (req, res) => {
+        const todos = await TodoService.getTodosNoTags();
+        res.status(200).json(todos);
+    });
+
     static createTodo = asyncHandlers(async (req, res) => {
         const newTodo = await TodoService.createTodo(req.body);
         res.status(201).json(newTodo);

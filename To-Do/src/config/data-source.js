@@ -8,6 +8,7 @@ const AppDataSource = new DataSource({
     entities: [
         require('../models/user.entity'),
         require('../models/todo.entity'),
+        require('../models/tag.entity'),
     ],
 });
 

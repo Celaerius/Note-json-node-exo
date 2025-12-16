@@ -11,14 +11,22 @@ class TodoService {
         return AppDataSource.getRepository('User');
     }
 
+    static get tagRepository() {
+        return AppDataSource.getRepository('Tag');
+    }
+
     static async getAllTodos() {
+        return await this.repository.find({ relations: ['user', 'tags'] });
+    }
+
+    static async getTodosNoTags() {
         return await this.repository.find({ relations: ['user'] });
     }
 
     static async findById(id) {
         return await this.repository.findOne({
             where: { id },
-            relations: ['user'],
+            relations: ['user', 'tags'],
         });
     }
 
@@ -38,6 +46,7 @@ class TodoService {
             title: todo.title,
             isCompleted: todo.isCompleted || false,
             ...userData,
+            tags: todo.tags ? await this.tagRepository.findByIds(todo.tags) : [],
         });
 
         return await this.repository.save(newTodo);
