@@ -23,6 +23,14 @@ const UserEntity = new EntitySchema({
       nullable: false,
     },
   },
+  relations: {
+    todos: {
+      type: "one-to-many",
+      target: "Todo",
+      inverseSide: "user",
+      cascade: true,
+    },
+  },
 });
 
 module.exports = UserEntity;

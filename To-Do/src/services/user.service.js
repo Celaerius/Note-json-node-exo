@@ -6,11 +6,14 @@ class UserService {
     }
 
     static async findAllUsers() {
-        return await this.repository.find();
+        return await this.repository.find({ relations: ['todos'] });
     }
 
     static async findUserById(id) {
-        return await this.repository.findOneBy({ id });
+        return await this.repository.findOne({
+            where: { id },
+            relations: ['todos'],
+        });
     }
 
     static async createUser(user) {

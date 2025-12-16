@@ -18,6 +18,14 @@ const TodoEntity = new EntitySchema({
             default: false,
         },
     },
+    relations: {
+        user: {
+            type: 'many-to-one',
+            target: 'User',
+            joinColumn: true,
+            inverseSide: 'todos',
+        },
+    },
 });
 
 module.exports = TodoEntity;
