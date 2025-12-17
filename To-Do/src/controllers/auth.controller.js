@@ -7,7 +7,7 @@ const userRepository = AppDataSource.getRepository("User");
 
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         const existingUser = await userRepository.findOneBy({ email });
         console.log("test",existingUser);
@@ -21,6 +21,7 @@ const register = async (req, res) => {
             name,
             email,
             password: hashedPassword,
+            role: role || "USER",
         });
 
         await userRepository.save(newUser);
