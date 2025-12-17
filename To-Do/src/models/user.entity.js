@@ -22,6 +22,10 @@ const UserEntity = new EntitySchema({
       type: "varchar",
       nullable: false,
     },
+    role: {
+      type: "varchar",
+      default: "USER",
+    },
   },
   relations: {
     todos: {

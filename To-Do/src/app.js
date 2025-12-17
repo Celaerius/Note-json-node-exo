@@ -3,6 +3,7 @@ const express = require('express');
 const todoRoutes = require('./routes/todo.routes');
 const userRoutes = require('./routes/user.routes');
 const tagRoutes = require('./routes/tag.routes');
+const authRoutes = require('./routes/auth.routes');
 const passport = require('passport');
 const { middlewareLogger } = require('./middlewares/logger.middleware');
 const { errorHandler } = require('./errors/errorHandler');
@@ -13,7 +14,9 @@ app.use(express.json());
 app.use(middlewareLogger);
 
 app.use(passport.initialize());
+require('./config/passport')(passport);
 
+app.use('/api/auth', authRoutes);
 app.use('/api/todos', todoRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tags', tagRoutes);
