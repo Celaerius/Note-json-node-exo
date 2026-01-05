@@ -20,5 +20,6 @@ router.patch('/update-ticket/:id', requireAuth, requireRole('SUPPORT'), (req, re
     res.status(200).json(req.body);
 });
 
+
 module.exports = router;
 

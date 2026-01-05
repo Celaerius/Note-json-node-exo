@@ -10,7 +10,6 @@ const register = async (req, res) => {
         const { name, email, password, role } = req.body;
 
         const existingUser = await userRepository.findOneBy({ email });
-        console.log("test",existingUser);
         if (existingUser) {
             return res.status(400).json({ message: "Email already in use."});
         }

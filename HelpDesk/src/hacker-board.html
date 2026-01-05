@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Board - Test XSS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .messages-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .messages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .messages-header h2 {
+            color: #333;
+        }
+
+        .btn-refresh {
+            background: #28a745;
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+
+        .btn-refresh:hover {
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        #messagesList {
+            list-style: none;
+        }
+
+        .message-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .message-date {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .message-content {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .payload-examples {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .payload-examples h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+
+        .payload-examples code {
+            background: white;
+            padding: 5px 8px;
+            border-radius: 3px;
+            display: block;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔓 Hacker Board - Test XSS</h1>
+            <p>Interface de test pour démontrer les vulnérabilités XSS</p>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Attention :</strong> Ceci est un environnement de test pour comprendre les failles XSS.
+            N'utilisez jamais ces techniques sur des systèmes réels sans autorisation !
+        </div>
+
+        <div class="form-section">
+            <h2>Poster un message</h2>
+            <form id="messageForm">
+                <div class="form-group">
+                    <label for="content">Contenu du message :</label>
+                    <textarea
+                        id="content"
+                        name="content"
+                        rows="4"
+                        placeholder="Écrivez votre message... ou tentez une injection XSS 😈"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="payload-examples">
+                    <h4>💀 Exemples de payloads malveillants :</h4>
+                    <code>&lt;img src="x" onerror="alert('HACKÉ ! Session : ' + document.cookie)"&gt;</code>
+                    <code>&lt;script&gt;alert('XSS Vulnérabilité détectée !')&lt;/script&gt;</code>
+                    <code>&lt;svg onload="alert('SVG XSS')"&gt;&lt;/svg&gt;</code>
+                </div>
+
+                <button type="submit" class="btn">📤 Envoyer le message</button>
+            </form>
+        </div>
+
+        <div class="messages-section">
+            <div class="messages-header">
+                <h2>Messages reçus</h2>
+                <button class="btn btn-refresh" onclick="loadMessages()">🔄 Rafraîchir</button>
+            </div>
+            <ul id="messagesList">
+                <li class="empty-state">Aucun message pour le moment...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = ''; // URL relative - le serveur Express servira l'HTML
+
+        // Charger les messages au démarrage
+        document.addEventListener('DOMContentLoaded', loadMessages);
+
+        // Gestion du formulaire
+        document.getElementById('messageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const content = document.getElementById('content').value;
+
+            try {
+                const response = await fetch(`${API_URL}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                if (response.ok) {
+                    document.getElementById('content').value = '';
+                    loadMessages();
+                    alert('✅ Message envoyé avec succès !');
+                } else {
+                    alert('❌ Erreur lors de l\'envoi du message');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('❌ Impossible de se connecter au serveur. Vérifiez qu\'il est bien démarré.');
+            }
+        });
+
+        // Charger les messages
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${API_URL}/messages`);
+                const messages = await response.json();
+
+                const messagesList = document.getElementById('messagesList');
+
+                if (messages.length === 0) {
+                    messagesList.innerHTML = '<li class="empty-state">Aucun message pour le moment...</li>';
+                    return;
+                }
+
+                // ATTENTION : Cette ligne est VOLONTAIREMENT vulnérable pour la démo !
+                // innerHTML permet l'exécution de code JavaScript injecté
+                messagesList.innerHTML = messages.map(msg => `
+                    <li class="message-item">
+                        <div class="message-date">📅 ${new Date(msg.date).toLocaleString('fr-FR')}</div>
+                        <div class="message-content">${msg.content}</div>
+                    </li>
+                `).join('');
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                document.getElementById('messagesList').innerHTML =
+                    '<li class="empty-state">❌ Erreur de chargement. Le serveur est-il démarré ?</li>';
+            }
+        }
+    </script>
+</body>
+</html>

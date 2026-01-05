@@ -44,6 +44,7 @@ class TicketService {
             title: ticket.title,
             description: ticket.description,
             status: ticket.status || 'OPEN',
+            ...userData,
             tags: ticket.tags ? await this.tagRepository.findByIds(ticket.tags) : [],
         });
 
